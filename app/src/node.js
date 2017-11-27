@@ -68,7 +68,7 @@ export default class Node extends PIXI.Graphics {
         nodeBox.addChild(topHandle)
         nodeBox.lineStyle(2, App.current.theme.primaryColor, 1)
         nodeBox.beginFill(App.current.theme.secondaryColor, 1)
-        nodeBox.drawRect(0, 0, 105, 115)
+        nodeBox.drawRect(0, 0, 105, 230)
         nodeBox.endFill()
         nodeBox.lineStyle(2, 0xaaaaaa, 1)
         topHandle.interactive = true
