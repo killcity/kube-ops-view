@@ -3,6 +3,7 @@ MAINTAINER Henning Jacobs <henning@jacobs1.de>
 
 EXPOSE 8080
 
+RUN cat /etc/apk/repositories
 RUN apk add --no-cache python3 python3-dev gcc musl-dev zlib-dev libffi-dev openssl-dev ca-certificates && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
