@@ -75,7 +75,8 @@ class StaticClusterDiscoverer:
                 # => assume default kubectl proxy URL
                 cluster = Cluster(generate_cluster_id(DEFAULT_CLUSTERS), DEFAULT_CLUSTERS)
             else:
-                config = kubernetes.client.configuration
+                # "load_incluster_config" set defaults in the config class
+                config = kubernetes.client.configuration.Configuration()
                 cluster = Cluster(
                     generate_cluster_id(config.host),
                     config.host,
@@ -141,7 +142,7 @@ class KubeconfigDiscoverer:
             if self._contexts and context['name'] not in self._contexts:
                 # filter out
                 continue
-            config = kubernetes.client.ConfigurationObject()
+            config = kubernetes.client.configuration.Configuration()
             kubernetes.config.load_kube_config(config_file, context=context['name'], client_configuration=config)
             authorization = config.api_key.get('authorization')
             if authorization:

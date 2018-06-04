@@ -19,8 +19,19 @@ def generate_mock_pod(index: int, i: int, j: int):
         'log-lady',
         'sheriff-truman',
     ]
-    pod_phases = ['Pending', 'Running', 'Running']
-    labels = {}
+    labels = {
+        'env': ['prod', 'dev'],
+        'owner': ['x-wing', 'iris']
+    }
+    pod_phases = ['Pending', 'Running', 'Running', 'Failed']
+
+    pod_labels = {}
+    for li, k in enumerate(labels):
+        v = labels[k]
+        label_choice = hash_int((index + 1) * (i + 1) * (j + 1) * (li + 1)) % (len(v) + 1)
+        if(label_choice != 0):
+            pod_labels[k] = v[label_choice - 1]
+
     phase = pod_phases[hash_int((index + 1) * (i + 1) * (j + 1)) % len(pod_phases)]
     containers = []
     for k in range(1 + j % 2):
@@ -33,12 +44,15 @@ def generate_mock_pod(index: int, i: int, j: int):
             if j % 13 == 0:
                 container.update(**{'ready': False, 'state': {'waiting': {'reason': 'CrashLoopBackOff'}}})
             elif j % 7 == 0:
-                container.update(**{'ready': True, 'state': {'running': {}}, 'restartCount': 3})
+                container.update(**{'ready': False, 'state': {'running': {}}, 'restartCount': 3})
+        elif phase == 'Failed':
+            del container['state']
+            del container['ready']
         containers.append(container)
     pod = {
         'name': '{}-{}-{}'.format(names[hash_int((i + 1) * (j + 1)) % len(names)], i, j),
         'namespace': 'kube-system' if j < 3 else 'default',
-        'labels': labels,
+        'labels': pod_labels,
         'phase': phase,
         'containers': containers
     }
@@ -58,7 +72,12 @@ def query_mock_cluster(cluster):
             continue
         labels = {}
         if i < 2:
-            labels['master'] = 'true'
+            if index == 0:
+                labels['kubernetes.io/role'] = 'master'
+            elif index == 1:
+                labels['node-role.kubernetes.io/master'] = ''
+            else:
+                labels['master'] = 'true'
         pods = {}
         for j in range(hash_int((index + 1) * (i + 1)) % 32):
             # add/remove some pods every 7 seconds
