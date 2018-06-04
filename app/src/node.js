@@ -61,10 +61,11 @@ export default class Node extends PIXI.Graphics {
     }
 
     draw() {
+        const resources = this.getResourceUsage()
         const nodeBox = this
         const topHandle = new PIXI.Graphics()
         topHandle.beginFill(App.current.theme.primaryColor, 1)
-        topHandle.drawRect(0, 0, 105, 15)
+        topHandle.drawRect(0, 0, 210, 15)
         topHandle.endFill()
         const ellipsizedNodeName = this.node.name.length > 17 ? this.node.name.substring(0, 17).concat('…') : this.node.name
         const text = new PIXI.Text(ellipsizedNodeName, {fontFamily: 'ShareTechMono', fontSize: 10, fill: 0x000000})
@@ -74,7 +75,7 @@ export default class Node extends PIXI.Graphics {
         nodeBox.addChild(topHandle)
         nodeBox.lineStyle(2, App.current.theme.primaryColor, 1)
         nodeBox.beginFill(App.current.theme.secondaryColor, 1)
-        nodeBox.drawRect(0, 0, 105, 230)
+        nodeBox.drawRect(0, 0, 210, 230)
         nodeBox.endFill()
         nodeBox.lineStyle(2, 0xaaaaaa, 1)
         topHandle.interactive = true
@@ -91,7 +92,6 @@ export default class Node extends PIXI.Graphics {
         topHandle.on('mouseout', function () {
             nodeBox.tooltip.visible = false
         })
-        const resources = this.getResourceUsage()
         const bars = new Bars(nodeBox, resources, nodeBox.tooltip)
         bars.x = 0
         bars.y = 1
