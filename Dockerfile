@@ -4,8 +4,8 @@ MAINTAINER Henning Jacobs <henning@jacobs1.de>
 EXPOSE 8080
 
 RUN echo "http://mirror1.hs-esslingen.de/pub/Mirrors/alpine/v3.7/main" > /etc/apk/repositories && \
-    echo "http://mirror1.hs-esslingen.de/pub/Mirrors/alpine/v3.7/community" >> /etc/apk/repositories
-RUN apk add --no-cache python3 python3-dev gcc musl-dev zlib-dev libffi-dev openssl-dev ca-certificates && \
+    echo "http://mirror1.hs-esslingen.de/pub/Mirrors/alpine/v3.7/community" >> /etc/apk/repositories && \
+    apk add --no-cache python3 python3-dev gcc musl-dev zlib-dev libffi-dev openssl-dev ca-certificates && \
     python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
     pip3 install --upgrade pipenv gevent && \

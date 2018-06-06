@@ -1,6 +1,6 @@
 [[source]]
 
-url = "https://pypi.org/simple"
+url = "https://bahnhub.tech.rz.db.de/artifactory/pypi-remote"
 verify_ssl = true
 name = "pypi"
 
